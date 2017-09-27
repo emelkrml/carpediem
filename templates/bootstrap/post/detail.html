@@ -1,0 +1,33 @@
+{% extends 'bootstrap/base/post_base.html' %}
+
+{% block body %}
+
+    <!-- Blog Entries Column -->
+    {% if post.image %}
+        <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap" width="700" height="315">
+        <hr>
+    {% endif %}
+    <h3>{{ post.title }}</h3>
+    <div class="card-footer text-muted">
+        {{ post.publishing_date  }}
+        <h5>Yazar: {{ post.user.get_full_name }}</h5>
+    </div>
+    <p>{{ post.content|safe | linebreaks }}</p>
+{#                <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">İncele</a>#}
+{#                    {% if request.user.is_authenticated %}#}
+{#                    <a href="{{ post.get_update_url }}" class="btn btn-default" role="button">Düzenle</a>#}
+{#                    <a href="{{ post.get_delete_url }}" class="btn btn-danger" role="button">Sil</a>#}
+{#                    {% endif %}#}
+{#                </p>#}
+    <br><br><hr>
+
+    <h3>Yorum Ekle</h3>
+    {% include 'post/comment.html'%}
+    <hr>
+    {% for comment in post.comments.all %}
+        <h4>{{ comment.name }} | <small>{{ comment.created_date|timesince }} önce</small></h4>
+        <p>{{ comment.content |linebreaks }}</p>
+        <hr>
+    {% endfor %}
+
+{% endblock body %}

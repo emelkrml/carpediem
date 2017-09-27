@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block title %} Anasayfa - {{ block.super }} {% endblock title %}
+
+{% block body %}
+    Hoşgeldiniz {{ request.user.get_full_name }}
+{% endblock body %}

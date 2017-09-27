@@ -1,0 +1,72 @@
+{% load staticfiles i18n %}
+{% load  tags %}
+
+<!-- Sidebar Widgets Column -->
+
+<!-- Search Widget -->
+<div class="card my-3">
+    <h5 class="card-header"><i class="fa fa-search"></i> Arama</h5>
+    <div class="card-body">
+        <div class="input-group">
+            <form class="navbar-form navbar-left" role="search" method="GET" action="">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="q" placeholder="" value="{{ request.GET.q }}" >
+                    <span class="input-group-btn">
+                        <input class="btn btn-default" type="submit" value="Ara">
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Titles Widget -->
+<div class="card my-3">
+    <h5 class="card-header"><i class="fa fa-book"></i>  Başlıklar</h5>
+    <div class="card-body">
+        <div class="row">
+            <ul class="list-unstyled mb-0">
+            {% get_posts as post_list %}
+                {% for post in post_list %}
+                    <li>
+                      <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Categories Widget -->
+<div class="card my-3">
+    <h5 class="card-header"><i class="fa fa-th"></i> Kategoriler</h5>
+    <div class="card-body">
+        <div class="row">
+            <ul class="list-unstyled mb-0">
+            {% get_categories as category_list %}
+                {% for category in category_list %}
+                    <li>
+                      <a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Side Widget -->
+<div class="card my-4">
+    <h5 class="card-header"><i class="fa fa-tags"></i>  Etiketler</h5>
+    <div class="card-body">
+        <div class="row">
+            <ul class="list-unstyled mb-0">
+                {% get_tags as tag_list %}
+                {% for tag in tag_list %}
+                <li>
+                    <a href="{{ tag.get_absolute_url }}">  {{ tag.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

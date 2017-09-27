@@ -1,0 +1,34 @@
+{% extends 'bootstrap/base/post_base.html' %}
+
+{% block body %}
+{% for post in posts %}
+    <div class="card mb-4">
+        {% if post.image %}
+            <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap" width="700" height="315">
+        {% endif %}
+        <div class="card-body">
+            <h2 class="card-title">{{ post.title }}</h2>
+            <p class="card-text">{{ post.content|safe| linebreaks | truncatechars:150 }}</p>
+            <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Daha fazla &rarr;</a>
+        </div>
+        <div class="card-footer text-muted">
+            {{ post.publishing_date  }}     {{ post.user.get_full_name }}
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Pagination -->
+<ul class="pagination justify-content-center mb-4">
+    {% if posts.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?sayfa={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&larr; Geri</a>
+        </li>
+    {% endif %}
+    {% if posts.has_next %}
+        <li class="page-item ">
+            <a class="page-link" href="?sayfa={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">İleri &rarr;</a>
+        </li>
+    {% endif %}
+</ul>
+
+{% endblock body %}

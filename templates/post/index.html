@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="container">
+    {% for post in posts %}
+        <div class="row">
+          <div class="col-sm-6 col-md-offset-3">
+            <div class="thumbnail">
+              <div class="caption">
+                  {% if post.image %}
+                    <img src="{{ post.image.url }}" class="img-responsive">
+                  {% endif %}
+                <h3>{{ post.title }}<small><br> {{ post.publishing_date | timesince }} önce</small></h3>
+                <h4>Yazar: {{ post.user.get_full_name }}</h4>
+                <p>{{ post.content|safe| linebreaks | truncatechars:150 }}</p>
+                <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">İncele</a>
+                    {% if request.user.is_authenticated %}
+                    <a href="{{ post.get_update_url }}" class="btn btn-default" role="button">Düzenle</a>
+                    <a href="{{ post.get_delete_url }}" class="btn btn-danger" role="button">Sil</a>
+                    {% endif %}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+     <div class="row">
+          <div class="col-sm-6 col-md-offset-3">
+            <div class="pagination">
+                <span class="step-links">
+                    {% if posts.has_previous %}
+{#                        Hem sayfa hem de arama sorgusu beraber çalışacak.#}
+                        <a href="?sayfa={{ posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">geri</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+                    </span>
+
+                    {% if posts.has_next %}
+{#                        Hem sayfa hem de arama sorgusu beraber çalışacak.#}
+                        <a href="?sayfa={{ posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">ileri</a>
+                    {% endif %}
+                </span>
+            </div>
+          </div>
+     </div>
+    </div>
+{% endblock body %}

@@ -1,0 +1,22 @@
+{% extends 'bootstrap/base/account_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block container %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-7 col-md-offset-1">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2 class="page-header">
+                    <div class="alert alert-info" role="alert">Makale Düzenle</div>
+                </h2>
+                <a href="{% url 'accounts:article' %}" class="btn btn-danger pull-right" role="button"><i class="fa fa-arrow-left"></i>  Geri Dön</a><br>
+                {{ form|crispy }}
+                {{ form.media }}
+                <input class="btn btn-primary" type="submit" value="Gönder">
+                <a href="{% url 'accounts:article' %}" class="btn btn-danger pull-right" role="button"><i class="fa fa-arrow-left"></i>  Geri Dön</a><br>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock container %}

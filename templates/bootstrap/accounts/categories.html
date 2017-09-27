@@ -1,0 +1,84 @@
+{% extends 'bootstrap/base/account_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block container %}
+     <!-- Page Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Kategoriler</h1>
+            <p><a href="#" class="btn btn-success" data-toggle="modal" data-target="#addModal" role="button"><i class="fa fa-plus"></i>  Kategori Ekle</a></p>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Başlık</th>
+                    <th>İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ category.title }}</td>
+                    <td>
+                        <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                          <div class="btn-group" role="group">
+{#                            <button type="button" class="btn btn-warning" data-toggle="modal" data-placement="top" title="İncele"><i class="fa fa-eye"></i></button>#}
+                              <a href="{{ category.get_absolute_url }}" class="btn btn-warning" role="button"><i class="fa fa-eye"></i></a>
+                          </div>
+                          <div class="btn-group" role="group">
+{#                            <button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Düzenle"><i class="fa fa-edit"></i></button>#}
+                              <a href="{{ category.get_update_url }}" class="btn btn-success" role="button"><i class="fa fa-edit"></i></a>
+                          </div>
+                          <div class="btn-group" role="group">
+{#                            <button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Sil"><i class="fa fa-trash"></i></button>#}
+                              <a href="{{ category.get_delete_url }}" class="btn btn-danger" role="button"><i class="fa fa-trash"></i></a>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <ul class="pagination justify-content-center mb-4">
+                {% if categories.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?sayfa={{ categories.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&larr; Geri</a>
+                    </li>
+                {% endif %}
+                {% if categories.has_next %}
+                    <li class="page-item ">
+                        <a class="page-link" href="?sayfa={{ categories.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">İleri &rarr;</a>
+                    </li>
+                {% endif %}
+            </ul>
+
+            <!-- Add Modal -->
+            <div id="addModal" class="modal fade" role="dialog">
+              <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Kategori Ekle</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="modal-footer">
+                            <input class="btn btn-primary" type="submit" value="Gönder">
+                            <a href="{% url 'accounts:category' %}" class="btn btn-danger pull-right" role="button"><i class="fa fa-arrow-left"></i>  Geri Dön</a><br>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+{% endblock container %}
