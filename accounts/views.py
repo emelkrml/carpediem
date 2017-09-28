@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import json
-
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.template import loader
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mail, BadHeaderError
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import LoginForm, RegisterForm, PostForm, CategoryForm, TagForm
-from post.models import Post, Category, CategoryToPost, Tag
+from .forms import LoginForm, RegisterForm, PostForm, CategoryForm, TagForm, ContactForm
+from post.models import Post, Category, Tag
 
 
 def login_view(request):
@@ -46,6 +46,29 @@ def logout_view(request):
     return redirect('index')
 
 
+def about_us(request):
+    template = loader.get_template("bootstrap/about_us.html")
+    return HttpResponse(template.render())
+
+def email(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            from_email = form.cleaned_data['from_email']
+            message = form.cleaned_data['message']
+            try:
+                send_mail(subject, message, from_email, ['krmlemel@gmail.com'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            messages.success(request, 'Mailiniz iletilmiştir.', extra_tags='mesaj-basarili')
+            url = reverse('accounts:email')
+            return HttpResponseRedirect(url)
+    return render(request, "bootstrap/contact.html", {'form': form})
+
+
 def article(request):
     if not request.user.is_authenticated():
         return Http404()
@@ -69,10 +92,8 @@ def article(request):
     try:
         posts = paginator.page(page)
     except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
         posts = paginator.page(1)
     except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
         contacts = paginator.page(paginator.num_pages)
 
     return render(request, "bootstrap/accounts/articles.html", {'posts': posts, 'form': form})
@@ -99,8 +120,6 @@ def article_update(request, slug):
 
 def article_delete(request, slug):
 
-    #   admin olmayan kullanıcıların create, delete ve pdate işlemlerinde yetkili olmalarını
-    #   engellemek için bu iki kod satırını yazarız. Bu işlemlerde sadece admin etkili olabilir.
     if not request.user.is_authenticated():
         return Http404()
 
@@ -135,10 +154,8 @@ def category(request):
     try:
         categories = paginator.page(page)
     except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
         categories = paginator.page(1)
     except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
         contacts = paginator.page(paginator.num_pages)
 
     return render(request, "bootstrap/accounts/categories.html", {'categories': categories, 'form': form})
@@ -165,8 +182,6 @@ def category_update(request, slug):
 
 def category_delete(request, slug):
 
-    #   admin olmayan kullanıcıların create, delete ve pdate işlemlerinde yetkili olmalarını
-    #   engellemek için bu iki kod satırını yazarız. Bu işlemlerde sadece admin etkili olabilir.
     if not request.user.is_authenticated():
         return Http404()
 
@@ -200,10 +215,8 @@ def tag(request):
     try:
         tags = paginator.page(page)
     except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
         tags = paginator.page(1)
     except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
         contacts = paginator.page(paginator.num_pages)
 
     return render(request, "bootstrap/accounts/tags.html", {'tags': tags, 'form': form})
@@ -230,8 +243,6 @@ def tag_update(request, slug):
 
 def tag_delete(request, slug):
 
-    #   admin olmayan kullanıcıların create, delete ve pdate işlemlerinde yetkili olmalarını
-    #   engellemek için bu iki kod satırını yazarız. Bu işlemlerde sadece admin etkili olabilir.
     if not request.user.is_authenticated():
         return Http404()
 

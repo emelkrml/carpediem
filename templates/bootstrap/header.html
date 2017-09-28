@@ -10,17 +10,17 @@
               <a class="nav-link" href="{% url 'index' %}"><i class="fa fa-home"></i>  Anasayfa</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fa fa-square-o"></i> Hakkımda</a>
+              <a class="nav-link" href="{% url 'about_us' %}"><i class="fa fa-square-o"></i> Hakkımda</a>
             </li>
             {% if request.user.is_superuser %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'accounts:article' %}"><i class="fa fa-user"></i>  {{ user.get_full_name }}</a></li>
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fa fa-envelope"></i>  İletişim</a>
+              <a class="nav-link" href="{% url 'accounts:email' %}"><i class="fa fa-envelope"></i>  İletişim</a>
             </li>
             {% if not request.user.is_authenticated %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}"><i class="fa fa-user-plus"></i>  Üye Ol</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}"><i class="fa fa-sign-in"></i>  Giriş</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}"><i class="fa fa-users"></i>  Üye Ol</a></li>
             {% else  %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Çıkış</a></li>
             {% endif %}

@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from post.models import Post, Tag, Category, CategoryToPost
+from post.models import Post, Tag, Category
 
 
 class LoginForm(forms.Form):
@@ -39,6 +41,14 @@ class RegisterForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Parolalar eşleşmiyor")
         return password2
+
+
+class ContactForm(forms.Form):
+    email = forms.EmailField(required=True)
+    konu = forms.CharField(required=True)
+    mesaj = forms.CharField(widget=forms.Textarea, required=True)
+
+    captcha = ReCaptchaField()
 
 
 class PostForm(forms.ModelForm):

@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^tag/(?P<slug>[\w-]+)/update/$', tag_update, name='tag_update'),
     url(r'^tag/(?P<slug>[\w-]+)/delete/$', tag_delete, name='tag_delete'),
 
+    url(r'^email/$', email, name='email'),
+
     url(r'^login/$', login_view, name='login'),
     url(r'^register/$', register_view, name='register'),
     url(r'^logout/$', logout_view, name='logout'),
