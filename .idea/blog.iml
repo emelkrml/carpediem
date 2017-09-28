@@ -16,6 +16,8 @@
       <sourceFolder url="file://$MODULE_DIR$/post" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/home" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/accounts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/send_email" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/notifications" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
